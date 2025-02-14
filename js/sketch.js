@@ -61,18 +61,24 @@ function setupSlider() {
   if (savedIntensity) {
     intensity = parseInt(savedIntensity);
     slider.value = intensity;
-    valueDisplay.innerText = intensity;
   } else {
     slider.value = 1;
-    valueDisplay.innerText = 1;
   }
+  
+  updateDisplay(); // Update the display with initial value
 
   slider.addEventListener('input', function() {
     intensity = parseInt(slider.value);
-    valueDisplay.innerText = intensity;
     localStorage.setItem('intensity', intensity); // Save to localStorage
+    updateDisplay(); // Update display when slider is changed
     setupWorkers(); // Update workers when intensity changes
   });
+}
+
+// Update Display with Multiplied Value
+function updateDisplay() {
+  var valueDisplay = document.getElementById('intensity-value');
+  valueDisplay.innerText = "Additional predictions: " + (intensity * 5);
 }
 
 // Load Saved Intensity
