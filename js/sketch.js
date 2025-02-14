@@ -3,6 +3,10 @@ var fr;
 var total = 0;
 var img;
 var container = document.getElementById('container');
+var intensity = 5;
+var totalImages = 0;
+var workers = [];
+var resetInterval;
 
 function preload() {
   img = loadImage("assets/hotslow.png");
@@ -12,46 +16,70 @@ function preload() {
 function setup() {
   createCanvas(displayWidth, displayHeight);
   imageMode(CENTER);
+  setupWorkers();
+  setupSlider();
+  resetInterval = setInterval(resetImages, 10000); // Reset every 10 seconds
 }
 
 function draw() {
   fr = frameRate();
-
   if (fr > 0) {
-    total += 5; // Half the rate of image growth
+    total += intensity; // Controlled by slider
   }
 
   for (var i = 0; i < total; i++){
-    var sz = random(1, width / 2); // Smaller images
+    var sz = random(1, width / 2); 
     image(img, random(0, width), random(0, height), sz, sz);
   }
 }
 
-// Half the workers for less CPU usage
-var totalWorkers = 7;
-var workers = [];
+// Setup Web Workers
+function setupWorkers() {
+  // Clear existing workers
+  workers.forEach(worker => worker.terminate());
+  workers = [];
 
-for (var i = 0; i < totalWorkers; i++){
-  var worker = new Worker('js/worker.js');
-  worker.addEventListener('message', function(e){
-    worker.postMessage(Math.random() * 10000);
-  });
-  worker.postMessage(1000);
-  workers.push(worker);
+  // Create new workers based on intensity
+  for (var i = 0; i < intensity; i++){
+    var worker = new Worker('js/worker.js');
+    worker.addEventListener('message', function(e){
+      worker.postMessage(Math.random() * 10000);
+    });
+    worker.postMessage(1000);
+    workers.push(worker);
+  }
 }
 
-var totalImages = 0;
+// Slider Control
+function setupSlider() {
+  var slider = document.getElementById('intensity-slider');
+  var valueDisplay = document.getElementById('intensity-value');
+  slider.addEventListener('input', function() {
+    intensity = parseInt(slider.value);
+    valueDisplay.innerText = intensity;
+    setupWorkers(); // Update workers when intensity changes
+  });
+}
 
+// Image Spam Logic
 function addImage(){
   var img = document.createElement('img');
   img.src = "assets/hotslow.png?v=" + Math.random();
-  if (totalImages < 50) { // Half the total images
+  if (totalImages < intensity * 10) { // More images with higher intensity
     document.body.appendChild(img);
     totalImages++;
   }
-  setTimeout(addImage, 200); // Slower image addition rate
+  setTimeout(addImage, 200 / intensity); // Faster with higher intensity
 }
 
+// Reset Images
+function resetImages() {
+  totalImages = 0;
+  var images = document.querySelectorAll('body img');
+  images.forEach(img => img.remove());
+}
+
+// Intense Mode
 document.getElementById('intense').addEventListener('click', function(e){
   e.preventDefault();
   container.style.display = 'none';
