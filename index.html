@@ -73,25 +73,6 @@
     .discord-link:hover {
       text-decoration: underline;
     }
-
-    .toggle-button {
-      background-color: #3C3C3C;
-      color: #D4D4D4;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-weight: 500;
-      transition: background 0.3s;
-    }
-
-    .toggle-button.active {
-      background-color: #007ACC;
-    }
-
-    .toggle-button:hover {
-      background-color: #5A5A5A;
-    }
   </style>
 </head>
 <body>
@@ -103,7 +84,6 @@
         <input type="range" id="intensity-slider" min="1" max="10" value="1">
         <span id="intensity-value">1</span>
       </p>
-      <button class="toggle-button" id="toggle-spam">Start Spamming</button>
       <p>
         Made by <span class="username">1terrygoodmonke</span> on Discord :D
         <br>
@@ -115,33 +95,5 @@
     </div>
   </div>
   <script src="js/sketch.js"></script>
-  <script>
-    // Toggle Logic
-    var isSpamming = false;
-    var spamInterval;
-
-    document.getElementById('toggle-spam').addEventListener('click', function() {
-      isSpamming = !isSpamming;
-
-      if (isSpamming) {
-        this.innerText = 'Stop Spamming';
-        this.classList.add('active');
-        startSpamming();
-      } else {
-        this.innerText = 'Start Spamming';
-        this.classList.remove('active');
-        stopSpamming();
-      }
-    });
-
-    function startSpamming() {
-      spamInterval = setInterval(addImage, 1000 / intensity);
-    }
-
-    function stopSpamming() {
-      clearInterval(spamInterval);
-      resetImages();
-    }
-  </script>
 </body>
 </html>
