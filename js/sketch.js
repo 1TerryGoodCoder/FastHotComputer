@@ -3,7 +3,7 @@ var fr;
 var total = 0;
 var img;
 var container = document.getElementById('container');
-var intensity = 1; // Default to 1 for gentler start
+var intensity = 1; // Default to 1 if no saved value
 var totalImages = 0;
 var workers = [];
 var resetInterval;
@@ -16,9 +16,10 @@ function preload() {
 function setup() {
   createCanvas(displayWidth, displayHeight);
   imageMode(CENTER);
+  loadSavedIntensity();
   setupWorkers();
   setupSlider();
-  resetInterval = setInterval(resetImages, 10000); // Reset every 10 seconds
+  resetInterval = setInterval(resetImages, 2000 * intensity); // Reset every 10 seconds
 }
 
 function draw() {
@@ -50,19 +51,38 @@ function setupWorkers() {
   }
 }
 
-// Slider Control
+// Slider Control with Saving to localStorage
 function setupSlider() {
   var slider = document.getElementById('intensity-slider');
   var valueDisplay = document.getElementById('intensity-value');
+
+  // Load saved value or set to 1 if none exists
+  var savedIntensity = localStorage.getItem('intensity');
+  if (savedIntensity) {
+    intensity = parseInt(savedIntensity);
+    slider.value = intensity;
+    valueDisplay.innerText = intensity;
+  } else {
+    slider.value = 1;
+    valueDisplay.innerText = 1;
+  }
+
   slider.addEventListener('input', function() {
     intensity = parseInt(slider.value);
     valueDisplay.innerText = intensity;
+    localStorage.setItem('intensity', intensity); // Save to localStorage
     setupWorkers(); // Update workers when intensity changes
   });
+}
 
-  // Set default value to 1 and update text
-  slider.value = 1;
-  valueDisplay.innerText = 1;
+// Load Saved Intensity
+function loadSavedIntensity() {
+  var savedIntensity = localStorage.getItem('intensity');
+  if (savedIntensity) {
+    intensity = parseInt(savedIntensity);
+  } else {
+    intensity = 1;
+  }
 }
 
 // Image Spam Logic
