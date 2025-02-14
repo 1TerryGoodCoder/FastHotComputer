@@ -1,172 +1,99 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Professional Website</title>
+  <title>New Tab</title>
+  <!-- Importing Roboto Font -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <!-- p5.js Library -->
+  <script src="js/p5.js"></script>
+  <link rel="stylesheet" href="style.css">
   <style>
+    /* Dark Mode Zero Theme with Roboto Font */
     body {
       background-color: #1E1E1E;
       color: #D4D4D4;
       font-family: 'Roboto', sans-serif;
     }
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px;
-      background: #252526;
+
+    h1 {
+      color: #569CD6;
+      font-weight: 500;
     }
+
+    #container {
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: #252526;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    input[type="range"] {
+      width: 100%;
+      background: #3C3C3C;
+      -webkit-appearance: none;
+      height: 5px;
+      border-radius: 5px;
+      outline: none;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 15px;
+      height: 15px;
+      background: #569CD6;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    input[type="range"]::-moz-range-thumb {
+      width: 15px;
+      height: 15px;
+      background: #569CD6;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
     .username {
       color: #9CDCFE;
       font-weight: 700;
     }
-    nav {
+
+    .discord-links {
       display: flex;
-      gap: 15px;
-      align-items: center;
+      gap: 10px;
     }
-    nav a {
-      color: #569CD6;
+
+    .discord-link {
+      color: #033dfc;
       text-decoration: none;
     }
-    nav a:hover {
+
+    .discord-link:hover {
       text-decoration: underline;
-    }
-    .tools-dropdown {
-      position: relative;
-      display: inline-block;
-    }
-    .tools-dropdown-content {
-      display: none;
-      position: absolute;
-      background-color: #252526;
-      box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
-      z-index: 1;
-    }
-    .tools-dropdown-content a {
-      color: #569CD6;
-      padding: 8px 16px;
-      text-decoration: none;
-      display: block;
-    }
-    .tools-dropdown-content a:hover {
-      background-color: #3C3C3C;
-    }
-    .tools-dropdown:hover .tools-dropdown-content {
-      display: block;
-    }
-    .color-picker {
-      padding: 20px;
-    }
-    .color-output {
-      margin-top: 10px;
-      padding: 10px;
-      background: #333;
-      color: white;
-      border-radius: 5px;
-    }
-    footer {
-      text-align: center;
-      padding: 20px;
-      background: #252526;
-      color: #D4D4D4;
-      position: fixed;
-      width: 100%;
-      bottom: 0;
     }
   </style>
 </head>
 <body>
-  <header>
-    <span class="username">1terrygoodmonke</span> |
-    <nav>
-      <div class="tools-dropdown">
-        <a href="#">Tools</a>
-        <div class="tools-dropdown-content">
-          <a href="#" onclick="showColorPicker()">Color Picker</a>
-          <a href="https://1terrygoodcoder.github.io/QuestFryer/" target="_blank">Quest Fryer</a>
-        </div>
-      </div>
-    </nav>
-  </header>
-  <main>
-    <section class="color-picker" id="color-picker" style="display: none;">
-      <h2>Color Picker</h2>
-      <input type="color" id="colorInput">
-      <input type="range" id="hueSlider" min="0" max="360" value="0">
-      <p>Hex Code: <span id="hexCode">#000000</span></p>
-      <p>RGB: <span id="rgbValues">0, 0, 0</span></p>
-      <button onclick="pickFromImage()">Pick Color from Image</button>
-      <input type="file" id="imageInput" accept="image/*" style="display:none;">
-      <canvas id="imageCanvas" style="display:none;"></canvas>
-      <div class="color-output" id="colorOutput"></div>
-    </section>
-  </main>
-  <footer>
-    Made by <span class="username">1terrygoodmonke</span>
-    <br>
-    <a href="https://discord.com/users/1285697154958233664" target="_blank">Discord Profile</a> | 
-    <a href="https://discord.gg/nqyE7gN3KJ" target="_blank">Discord Server</a>
-  </footer>
-  <script>
-    function showColorPicker() {
-      document.getElementById('color-picker').style.display = 'block';
-    }
-    var colorInput = document.getElementById('colorInput');
-    var hueSlider = document.getElementById('hueSlider');
-    var hexCode = document.getElementById('hexCode');
-    var rgbValues = document.getElementById('rgbValues');
-    var colorOutput = document.getElementById('colorOutput');
-
-    colorInput.addEventListener('input', function() {
-      hexCode.innerText = colorInput.value;
-      var rgb = hexToRgb(colorInput.value);
-      rgbValues.innerText = rgb.r + ', ' + rgb.g + ', ' + rgb.b;
-      colorOutput.style.backgroundColor = colorInput.value;
-    });
-
-    function hexToRgb(hex) {
-      var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
-      hex = hex.replace(shorthandRegex, function(m, r, g, b) {
-        return r + r + g + g + b + b;
-      });
-      var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-      return result ? {
-        r: parseInt(result[1], 16),
-        g: parseInt(result[2], 16),
-        b: parseInt(result[3], 16)
-      } : null;
-    }
-
-    function pickFromImage() {
-      document.getElementById('imageInput').click();
-    }
-
-    document.getElementById('imageInput').addEventListener('change', function(event) {
-      var reader = new FileReader();
-      reader.onload = function() {
-        var img = new Image();
-        img.onload = function() {
-          var canvas = document.getElementById('imageCanvas');
-          canvas.width = img.width;
-          canvas.height = img.height;
-          var ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0);
-          canvas.style.display = 'block';
-          canvas.addEventListener('click', function(e) {
-            var x = e.offsetX;
-            var y = e.offsetY;
-            var pixel = ctx.getImageData(x, y, 1, 1).data;
-            var hex = rgbToHex(pixel[0], pixel[1], pixel[2]);
-            hexCode.innerText = hex;
-            rgbValues.innerText = pixel[0] + ', ' + pixel[1] + ', ' + pixel[2];
-            colorOutput.style.backgroundColor = hex;
-          });
-        }
-        img.src = reader.result;
-      }
-      reader.readAsDataURL(event.target.files[0]);
-    });
-  </script>
+  <div id="container">
+    <div id="main">
+      <h1>QuestFryer - V1.1.4</h1>
+      <p>
+        Adjust the intensity: 
+        <input type="range" id="intensity-slider" min="1" max="10" value="1">
+        <span id="intensity-value">1</span>
+      </p>
+      <p>
+        Made by <span class="username">1terrygoodmonke</span> on Discord :D
+        <br>
+        <span class="discord-links">
+          <a class="discord-link" href="https://discord.com/users/1285697154958233664" target="_blank">Discord Profile</a> | 
+          <a class="discord-link" href="https://discord.gg/nqyE7gN3KJ" target="_blank">Discord Server</a>
+        </span>
+      </p>
+    </div>
+  </div>
+  <script src="js/sketch.js"></script>
 </body>
 </html>
