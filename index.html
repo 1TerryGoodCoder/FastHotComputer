@@ -1,21 +1,77 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Sigma Lagger - 1.1.4</title>
+  <title>Sigma Lagger - V1.4.0</title>
   <!-- p5.js Library -->
   <script src="js/p5.js"></script>
   <link rel="stylesheet" href="style.css">
   <style>
-    /* Make the username blue */
+    /* Dark Mode Zero Theme */
+    body {
+      background-color: #1E1E1E;
+      color: #D4D4D4;
+      font-family: 'Consolas', 'Courier New', monospace;
+    }
+
+    h1 {
+      color: #569CD6;
+    }
+
+    #container {
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: #252526;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    input[type="range"] {
+      width: 100%;
+      background: #3C3C3C;
+      -webkit-appearance: none;
+      height: 5px;
+      border-radius: 5px;
+      outline: none;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 15px;
+      height: 15px;
+      background: #569CD6;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    input[type="range"]::-moz-range-thumb {
+      width: 15px;
+      height: 15px;
+      background: #569CD6;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
     .username {
-      color: blue;
+      color: #9CDCFE;
+    }
+
+    .discord-link {
+      display: block;
+      margin-top: 5px;
+      color: #4FC3F7;
+      text-decoration: none;
+    }
+
+    .discord-link:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
 <body>
   <div id="container">
     <div id="main">
-      <h1>Quest Fryer - V1.1.4</h1>
+      <h1>Pred Slider - V1.4.0</h1>
       <p>
         Adjust the intensity: 
         <input type="range" id="intensity-slider" min="1" max="10" value="1">
@@ -23,6 +79,10 @@
       </p>
       <p>
         Made by <span class="username">1terrygoodmonke</span> on Discord :D
+        <br>
+        <a class="discord-link" href="https://discord.com/users/YOUR_DISCORD_ID" target="_blank">
+          View my Discord profile
+        </a>
       </p>
     </div>
   </div>
