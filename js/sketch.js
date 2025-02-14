@@ -3,7 +3,7 @@ var fr;
 var total = 0;
 var img;
 var container = document.getElementById('container');
-var intensity = 2;
+var intensity = 1; // Default to 1 for gentler start
 var totalImages = 0;
 var workers = [];
 var resetInterval;
@@ -40,7 +40,7 @@ function setupWorkers() {
   workers = [];
 
   // Create new workers based on intensity
-  for (var i = 0; i < intensity; i++) {
+  for (var i = 0; i < intensity * 2; i++) {
     var worker = new Worker('js/worker.js');
     worker.addEventListener('message', function(e) {
       worker.postMessage(Math.random() * 10000);
@@ -59,6 +59,10 @@ function setupSlider() {
     valueDisplay.innerText = intensity;
     setupWorkers(); // Update workers when intensity changes
   });
+
+  // Set default value to 1 and update text
+  slider.value = 1;
+  valueDisplay.innerText = 1;
 }
 
 // Image Spam Logic
@@ -69,7 +73,7 @@ function addImage() {
   imageElements.push(img); // Track this image
 
   // Cap the number of images based on intensity
-  var maxImages = intensity * 10; 
+  var maxImages = intensity * 20; 
 
   if (totalImages < maxImages) { 
     document.body.appendChild(img);
@@ -80,13 +84,14 @@ function addImage() {
 
 addImage(); // Start the image spam
 
-// Reset Images
+// Reset Images with Page Refresh
 function resetImages() {
   totalImages = 0;
   imageElements.forEach(img => {
     img.remove();
   });
   imageElements = []; // Clear the tracked images
+  location.reload(); // Forcefully refresh the page
 }
 
 // Intense Mode
