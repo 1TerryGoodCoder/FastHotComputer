@@ -3,14 +3,13 @@ var fr;
 var total = 0;
 var img;
 var container = document.getElementById('container');
-var intensity = 5;
+var intensity = 2;
 var totalImages = 0;
 var workers = [];
 var resetInterval;
 
 function preload() {
   img = loadImage("assets/hotslow.png");
-  addImage();
 }
 
 function setup() {
@@ -24,7 +23,7 @@ function setup() {
 function draw() {
   fr = frameRate();
   if (fr > 0) {
-    total += intensity; // Controlled by slider
+    total += intensity;
   }
 
   for (var i = 0; i < total; i++){
@@ -40,7 +39,7 @@ function setupWorkers() {
   workers = [];
 
   // Create new workers based on intensity
-  for (var i = 0; i < intensity; i++){
+  for (var i = 0; i < intensity * 2; i++){ // Fewer workers for slower modes
     var worker = new Worker('js/worker.js');
     worker.addEventListener('message', function(e){
       worker.postMessage(Math.random() * 10000);
@@ -65,12 +64,18 @@ function setupSlider() {
 function addImage(){
   var img = document.createElement('img');
   img.src = "assets/hotslow.png?v=" + Math.random();
-  if (totalImages < intensity * 10) { // More images with higher intensity
+
+  // Cap the number of images based on intensity
+  var maxImages = intensity * 20; // Maximum images per intensity level
+
+  if (totalImages < maxImages) { 
     document.body.appendChild(img);
     totalImages++;
   }
-  setTimeout(addImage, 200 / intensity); // Faster with higher intensity
+  setTimeout(addImage, 1000 / intensity); // Slower addition rate for lower intensity
 }
+
+addImage(); // Start the image spam
 
 // Reset Images
 function resetImages() {
