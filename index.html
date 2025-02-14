@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Pred Slider - V1.4.0</title>
+  <title>Sigma Lagger - V1.4.0</title>
   <!-- Importing Roboto Font -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
   <!-- p5.js Library -->
@@ -47,6 +47,14 @@
       cursor: pointer;
     }
 
+    input[type="range"]::-moz-range-thumb {
+      width: 15px;
+      height: 15px;
+      background: #569CD6;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
     .username {
       color: #9CDCFE;
       font-weight: 700;
@@ -66,21 +74,23 @@
       text-decoration: underline;
     }
 
-    /* Toggle Button */
     .toggle-button {
-      background-color: #007ACC;
-      color: #fff;
+      background-color: #3C3C3C;
+      color: #D4D4D4;
       border: none;
-      border-radius: 5px;
       padding: 10px 20px;
+      border-radius: 5px;
       cursor: pointer;
-      transition: background-color 0.3s;
-      font-family: 'Roboto', sans-serif;
-      margin-top: 10px;
+      font-weight: 500;
+      transition: background 0.3s;
+    }
+
+    .toggle-button.active {
+      background-color: #007ACC;
     }
 
     .toggle-button:hover {
-      background-color: #005A9E;
+      background-color: #5A5A5A;
     }
   </style>
 </head>
@@ -93,7 +103,7 @@
         <input type="range" id="intensity-slider" min="1" max="10" value="1">
         <span id="intensity-value">1</span>
       </p>
-      <button class="toggle-button" id="toggle-button">Start</button>
+      <button class="toggle-button" id="toggle-spam">Start Spamming</button>
       <p>
         Made by <span class="username">1terrygoodmonke</span> on Discord :D
         <br>
@@ -106,41 +116,30 @@
   </div>
   <script src="js/sketch.js"></script>
   <script>
-    let isRunning = false;
-    let imageInterval;
+    // Toggle Logic
+    var isSpamming = false;
+    var spamInterval;
 
-    // load
-    const savedState = localStorage.getItem('isRunning');
-    if (savedState === 'true') {
-      isRunning = true;
-      document.getElementById('toggle-button').innerText = 'Stop';
-      startImageSpam();
-    }
+    document.getElementById('toggle-spam').addEventListener('click', function() {
+      isSpamming = !isSpamming;
 
-    // tog
-    document.getElementById('toggle-button').addEventListener('click', function() {
-      isRunning = !isRunning;
-      localStorage.setItem('isRunning', isRunning);
-
-      if (isRunning) {
-        this.innerText = 'Stop';
-        startImageSpam();
+      if (isSpamming) {
+        this.innerText = 'Stop Spamming';
+        this.classList.add('active');
+        startSpamming();
       } else {
-        this.innerText = 'Start';
-        stopImageSpam();
+        this.innerText = 'Start Spamming';
+        this.classList.remove('active');
+        stopSpamming();
       }
     });
 
-    // start
-    function startImageSpam() {
-      imageInterval = setInterval(() => {
-        addImage();
-      }, 1000);
+    function startSpamming() {
+      spamInterval = setInterval(addImage, 1000 / intensity);
     }
 
-    // stop
-    function stopImageSpam() {
-      clearInterval(imageInterval);
+    function stopSpamming() {
+      clearInterval(spamInterval);
       resetImages();
     }
   </script>
