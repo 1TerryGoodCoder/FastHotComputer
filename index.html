@@ -47,14 +47,6 @@
       cursor: pointer;
     }
 
-    input[type="range"]::-moz-range-thumb {
-      width: 15px;
-      height: 15px;
-      background: #569CD6;
-      border-radius: 50%;
-      cursor: pointer;
-    }
-
     .username {
       color: #9CDCFE;
       font-weight: 700;
@@ -117,8 +109,18 @@
     let isRunning = false;
     let imageInterval;
 
+    // load
+    const savedState = localStorage.getItem('isRunning');
+    if (savedState === 'true') {
+      isRunning = true;
+      document.getElementById('toggle-button').innerText = 'Stop';
+      startImageSpam();
+    }
+
+    // tog
     document.getElementById('toggle-button').addEventListener('click', function() {
       isRunning = !isRunning;
+      localStorage.setItem('isRunning', isRunning);
 
       if (isRunning) {
         this.innerText = 'Stop';
@@ -129,10 +131,14 @@
       }
     });
 
+    // start
     function startImageSpam() {
-      imageInterval = setInterval(addImage, 1000);
+      imageInterval = setInterval(() => {
+        addImage();
+      }, 1000);
     }
 
+    // stop
     function stopImageSpam() {
       clearInterval(imageInterval);
       resetImages();
