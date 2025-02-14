@@ -40,7 +40,7 @@ function setupWorkers() {
   workers = [];
 
   // Create new workers based on intensity
-  for (var i = 0; i < intensity * 2; i++) {
+  for (var i = 0; i < intensity; i++) {
     var worker = new Worker('js/worker.js');
     worker.addEventListener('message', function(e) {
       worker.postMessage(Math.random() * 10000);
@@ -73,7 +73,7 @@ function addImage() {
   imageElements.push(img); // Track this image
 
   // Cap the number of images based on intensity
-  var maxImages = intensity * 20; 
+  var maxImages = intensity * 10; 
 
   if (totalImages < maxImages) { 
     document.body.appendChild(img);
