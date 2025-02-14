@@ -7,6 +7,7 @@ var intensity = 2;
 var totalImages = 0;
 var workers = [];
 var resetInterval;
+var imageElements = []; // Track all created images
 
 function preload() {
   img = loadImage("assets/hotslow.png");
@@ -26,7 +27,7 @@ function draw() {
     total += intensity;
   }
 
-  for (var i = 0; i < total; i++){
+  for (var i = 0; i < total; i++) {
     var sz = random(1, width / 2); 
     image(img, random(0, width), random(0, height), sz, sz);
   }
@@ -39,9 +40,9 @@ function setupWorkers() {
   workers = [];
 
   // Create new workers based on intensity
-  for (var i = 0; i < intensity * 2; i++){ // Fewer workers for slower modes
+  for (var i = 0; i < intensity; i++) {
     var worker = new Worker('js/worker.js');
-    worker.addEventListener('message', function(e){
+    worker.addEventListener('message', function(e) {
       worker.postMessage(Math.random() * 10000);
     });
     worker.postMessage(1000);
@@ -61,18 +62,20 @@ function setupSlider() {
 }
 
 // Image Spam Logic
-function addImage(){
+function addImage() {
   var img = document.createElement('img');
   img.src = "assets/hotslow.png?v=" + Math.random();
+  img.className = "spam-image"; // Class for easy removal
+  imageElements.push(img); // Track this image
 
   // Cap the number of images based on intensity
-  var maxImages = intensity * 20; // Maximum images per intensity level
+  var maxImages = intensity * 10; 
 
   if (totalImages < maxImages) { 
     document.body.appendChild(img);
     totalImages++;
   }
-  setTimeout(addImage, 1000 / intensity); // Slower addition rate for lower intensity
+  setTimeout(addImage, 1000 / intensity);
 }
 
 addImage(); // Start the image spam
@@ -80,16 +83,18 @@ addImage(); // Start the image spam
 // Reset Images
 function resetImages() {
   totalImages = 0;
-  var images = document.querySelectorAll('body img');
-  images.forEach(img => img.remove());
+  imageElements.forEach(img => {
+    img.remove();
+  });
+  imageElements = []; // Clear the tracked images
 }
 
 // Intense Mode
-document.getElementById('intense').addEventListener('click', function(e){
+document.getElementById('intense').addEventListener('click', function(e) {
   e.preventDefault();
   container.style.display = 'none';
   clearTimeout(timeout);
-  interval = setTimeout(function(){
+  interval = setTimeout(function() {
     container.style.display = 'block';
   }, 3000);
 });
